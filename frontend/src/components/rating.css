@@ -1,0 +1,11 @@
+.rating span{
+    margin: 0.1 rem;
+}
+.rating svg {
+    color: red
+}
+.rating-text{
+    font-size: 0.8 rem;
+    font-weight: 600;
+    padding-left: 0.5 rem;
+}
