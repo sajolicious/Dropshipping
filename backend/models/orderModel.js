@@ -67,7 +67,7 @@ const orderSchema = new mongoose.Schema({
     isDelivered: {
         type: Boolean,
         required: true,
-        defaulr: false,
+        default: false,
     },
     deliveredAt: {
         type: Date,

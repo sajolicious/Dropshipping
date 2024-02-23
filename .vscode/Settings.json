@@ -3,6 +3,6 @@
   "prettier.singleQuote": true,
   "prettier.arrowParens": "avoid",
   "prettier.jsxSingleQuote": true,
-  "prettier.trailingComma": "none",
+  
   "javascript.preferences.quoteStyle": "single"
 }

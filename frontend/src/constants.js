@@ -9,3 +9,4 @@ export const USERS_URL = '/api/users';
 export const ORDERS_URL = '/api/orders';
 
 export const BKASH_URL = '/api/config/bkash';
+export const UPLOADS_URL = '/api/upload'
