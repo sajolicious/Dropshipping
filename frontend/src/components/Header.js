@@ -1,86 +1,85 @@
-import {  Link, useNavigate } from 'react-router-dom';
-import {Badge, Navbar, Nav, Container, NavDropdown } from 'react-bootstrap'
-import { FaUser} from 'react-icons/fa';
-import { BsHandbag } from 'react-icons/bs';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
+import { Badge, Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import { FaUser, FaShoppingCart } from 'react-icons/fa';
+import { useSelector, useDispatch } from 'react-redux';
 import { useLogoutMutation } from '../slices/usersApiSlice';
 import { Logout } from '../slices/authSlice';
 import SearchBox from './SearchBox';
-import {useSelector, useDispatch} from 'react-redux';
-import { FaShoppingCart } from 'react-icons/fa';
+import { Fragment } from 'react';
 
 export const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
-  const { userInfo } =useSelector((state)=> state.auth);
-  
+  const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const nevigate = useNavigate();
-  
   const [logoutApiCall] = useLogoutMutation();
+
   const logoutHandler = async () => {
     try {
-        await logoutApiCall().unwrap();
-        dispatch(Logout());
-        nevigate('/login');
+      await logoutApiCall().unwrap();
+      dispatch(Logout());
+      window.location.href = '/login'; // Redirect using window.location.href for full page reload
     } catch (err) {
-        console.log(err)
+      console.log(err);
     }
-  }
+  };
+
   return (
     <header>
-      <Navbar bg='primary' variant='dark' expand='lg' collapseOnSelect>
+      <Navbar bg='dark' variant='dark' expand='lg'  collapseOnSelect>
         <Container>
-          <LinkContainer to='/'>
-            <Navbar.Brand>
-              
-              ProShop
-            </Navbar.Brand>
-          </LinkContainer>
+          <Link to='/' className='navbar-brand'>
+            ProShop
+          </Link>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ms-auto'>
-              <SearchBox />
-              <LinkContainer to='/cart'>
-                <Nav.Link>
-                  <FaShoppingCart /> Cart
-                  {cartItems.length > 0 && (
-                    <Badge pill bg='success' style={{ marginLeft: '5px' }}>
-                      {cartItems.reduce((a, c) => a + c.qty, 0)}
-                    </Badge>
-                  )}
-                </Nav.Link>
-              </LinkContainer>
+              <div className='relative mx-auto my-2 sm:my-0'>
+                <SearchBox />
+              </div>
+              <Link to='/cart' className='nav-link'>
+                <FaShoppingCart /> Cart
+                {cartItems.length > 0 && (
+                  <Badge pill bg='success' className='ms-1'>
+                    {cartItems.reduce((acc, curr) => acc + curr.qty, 0)}
+                  </Badge>
+                )}
+              </Link>
               {userInfo ? (
-                <>
-                  <NavDropdown title={userInfo.name} id='username'>
-                    <LinkContainer to='/profile'>
-                      <NavDropdown.Item>Profile</NavDropdown.Item>
-                    </LinkContainer>
-                    <NavDropdown.Item onClick={logoutHandler}>
-                      Logout
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                </>
+                <NavDropdown title={userInfo.name} id='username'>
+                  <Link to='/profile' className='dropdown-item'>
+                    Profile
+                  </Link>
+                  <a href='/' onClick={logoutHandler} className='dropdown-item'>
+                    Logout
+                  </a>
+                </NavDropdown>
               ) : (
-                <LinkContainer to='/login'>
-                  <Nav.Link>
-                    <FaUser /> Sign In
-                  </Nav.Link>
-                </LinkContainer>
+                <Link to='/login' className='nav-link'>
+                  <FaUser /> Sign In
+                </Link>
               )}
 
-              {/* Admin Links */}
               {userInfo && userInfo.isAdmin && (
                 <NavDropdown title='Admin' id='adminmenu'>
-                  <LinkContainer to='/admin/productlist'>
-                    <NavDropdown.Item>Products</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to='/admin/orderlist'>
-                    <NavDropdown.Item>Orders</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to='/admin/userlist'>
-                    <NavDropdown.Item>Users</NavDropdown.Item>
-                  </LinkContainer>
+                  <Link to='/admin/productlist' className='dropdown-item'>
+                    Products
+                  </Link>
+                  <Link to='/admin/orderlist' className='dropdown-item'>
+                    Orders
+                  </Link>
+                  <Link to='/admin/userlist' className='dropdown-item'>
+                    Users
+                  </Link>
+                  <Link to='/admin/createproduct' className='dropdown-item'>
+                    CreateProduct
+                  </Link>
+                  <Link to='/admin/createcoupon' className='dropdown-item'>
+                    CreateCoupon
+                  </Link>
+                  <Link to='/admin/allcoupons' className='dropdown-item'>
+                    AllCoupons
+                  </Link>
+                
                 </NavDropdown>
               )}
             </Nav>
@@ -88,5 +87,5 @@ export const Header = () => {
         </Container>
       </Navbar>
     </header>
-  )
-}
+  );
+};

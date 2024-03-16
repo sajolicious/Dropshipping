@@ -6,8 +6,7 @@ import {
   Route,
   RouterProvider
 } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import './index.module.scss';
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import PrivateRoute from './components/PrivateRoute';
@@ -18,7 +17,7 @@ import CartScreen from './screens/CartScreen';
 import { Provider } from 'react-redux';
 import store from './store';
 import LoginScreen from './screens/LoginScreen';
-import Registercreen from './screens/RegisterScreen';
+import RegisterScreen from './screens/RegisterScreen';
 import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
@@ -30,10 +29,19 @@ import ProductEditScreen from './screens/admin/ProductEditScreen';
 import UserListScreen from './screens/admin/UsersListScreen';
 import UserEditScreen from './screens/admin/UserEditScreen';
 import SearchBox from './components/SearchBox';
+import CategoryScreen from './screens/CategoryScreen';
+import ProductCreateScreen from './screens/admin/ProductCreateScreen';
 import { HelmetProvider } from 'react-helmet-async';
+import ChatArea from './screens/chatScreen/ChatArea';
+import CreateSingleChat from './screens/chatScreen/createSingleChat';
+import CreateCouponScreen from './screens/coupons/CreateCouponScreen';
+import AllCouponsScreen from './screens/coupons/AllCouponsScreen';
+import UpdateCouponScreen from './screens/coupons/UpdateCouponScreen';
+// Create the router
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
+      {/* Public Routes */}
       <Route index={true} path='/' element={<HomeScreen />} />
       <Route path='/search/:keyword' element={<HomeScreen />} />
       <Route path='/page/:pageNumber' element={<HomeScreen />} />
@@ -42,10 +50,19 @@ const router = createBrowserRouter(
         element={<HomeScreen />}
       />
       <Route path='/product/:id' element={<ProductScreen />} />
+      <Route path='/product/category' element={<CategoryScreen />} />
       <Route path='/cart' element={<CartScreen />} />
       <Route path='/login' element={<LoginScreen />} />
-      <Route path='/register' element={<Registercreen />} />
-      {/* Registered users */}
+      <Route path='/register' element={<RegisterScreen />} />
+      
+
+     
+     { /* chat routes */ }
+     <Route path='/createchat' element={<CreateSingleChat/>} />
+     <Route path='/chat/:chatId' element={<ChatArea/>} />
+      
+
+      {/* Private Routes */}
       <Route path='' element={<PrivateRoute />}>
         <Route path='/shipping' element={<ShippingScreen />} />
         <Route path='/payment' element={<PaymentScreen />} />
@@ -53,10 +70,12 @@ const router = createBrowserRouter(
         <Route path='/order/:id' element={<OrderScreen />} />
         <Route path='/profile' element={<ProfileScreen />} />
       </Route>
-      {/* Admin users */}
+
+      {/* Admin Routes */}
       <Route path='' element={<AdminRoute />}>
         <Route path='/admin/orderlist' element={<OrderListScreen />} />
         <Route path='/admin/productlist' element={<ProductListScreen />} />
+        <Route path='/admin/createproduct' element={<ProductCreateScreen />} />
         <Route
           path='/admin/productlist/:pageNumber'
           element={<ProductListScreen />}
@@ -64,18 +83,24 @@ const router = createBrowserRouter(
         <Route path='/admin/userlist' element={<UserListScreen />} />
         <Route path='/admin/product/:id/edit' element={<ProductEditScreen />} />
         <Route path='/admin/user/:id/edit' element={<UserEditScreen />} />
+        <Route path='/admin/createcoupon' element={<CreateCouponScreen />} />
+        <Route path='/admin/allcoupons' element={<AllCouponsScreen />} />
+        <Route path='/admin/updatecoupons/:id/edit' element={<UpdateCouponScreen />} />
       </Route>
     </Route>
   )
-) 
-const root = ReactDOM.createRoot(document.getElementById('root'))
+);
+
+// Render the app
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <HelmetProvider>
-    <Provider store={store}>
-     <RouterProvider router={router}/>
-    </Provider>
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
     </HelmetProvider>
-  </React.StrictMode>,
-)
-reportWebVitals()
+  </React.StrictMode>
+);
+
+reportWebVitals();

@@ -1,0 +1,11 @@
+// Instead of this (global style):
+/* @tailwind base; */
+
+// Use this (more specific wrapper):
+.base-styles {
+    @apply font-sans text-base; // Apply Tailwind classes here
+  }
+  
+  body {
+    @extend .base-styles; // Extend the wrapper class to body
+  }

@@ -1,0 +1,45 @@
+
+$main-color: #5d3fd4; 
+$green-color: #28a745;
+$red-color: #dc3545;
+$shadow-elevation-1: 0 4px 8px rgba(0, 0, 0, 0.1);
+$shadow-elevation-2: 0 8px 16px rgba(0, 0, 0, 0.1);
+$transition-standard: all 0.3s ease-in-out;
+
+@mixin add-box-shadow-and-rounded-corners($shadow-elevation, $border-radius) {
+  box-shadow: $shadow-elevation;
+  border-radius: $border-radius;
+}
+
+:root {
+  --main-color: $main-color;
+  --green-color: $green-color;
+  --red-color: $red-color;
+  --shadow-elevation-1: $shadow-elevation-1;
+  --shadow-elevation-2: $shadow-elevation-2;
+  --transition-standard: $transition-standard;
+}
+
+// Product screen
+.productScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+// Product image
+.productImage {
+  @include add-box-shadow-and-rounded-corners($shadow-elevation-1, 20px);
+  width: 400px;
+  height: 400px;
+  transition: var(--transition-standard);
+  border: 1px solid $main-color;
+
+  &:hover {
+    @include add-box-shadow-and-rounded-corners($shadow-elevation-2, 20px);
+    box-shadow: 0 0 10px 2px $main-color;
+  }
+}
+

@@ -1,10 +1,14 @@
 import { response } from 'express';
 import asyncHandler from '../middleware/asyncHandler.js';
 import Order from '../models/orderModel.js';
+import Coupon from '../models/couponModel.js'
 import axios from 'axios';
 import SSLCommerzPayment from 'sslcommerz-lts';
 const sslcz = new SSLCommerzPayment('cyphe65ce8f1d5862a', 'cyphe65ce8f1d5862a@ssl', false); // Replace with your actual store ID and password
 
+
+
+  
 // @desc Create new order
 // @route POST /api/orders
 // @access Private
@@ -16,12 +20,28 @@ const addOrderItems = asyncHandler(async (req, res) => {
         itemsPrice,
         taxPrice,
         shippingPrice,
-        totalPrice
+        totalPrice,
+        couponCode
     } = req.body;
+
     if (orderItems && orderItems.length === 0) {
         res.status(400);
         throw new Error('No order Items');
-    } else {
+    } 
+    let discount = 10;
+    if (couponCode) {
+        try {
+          
+          const coupon = await validateCoupon(couponCode, totalPrice);
+          discount = calculateDiscount(coupon, totalPrice);
+        } catch (error) {
+          res.status(400);
+          throw new Error(error.message);
+        }
+      }
+
+      const discountedTotalPrice = totalPrice - discount;
+    
         const order = new Order({
             orderItems: orderItems.map((x) => ({
                 ...x,
@@ -34,12 +54,14 @@ const addOrderItems = asyncHandler(async (req, res) => {
             itemsPrice,
             taxPrice,
             shippingPrice,
-            totalPrice
+            totalPrice: discountedTotalPrice, 
+            discount, 
+            coupon: couponCode 
         });
         console.log(order);
         const createOrder = await order.save();
         res.status(201).json(createOrder);
-    }
+    
 });
 
 // @desc Create new order
@@ -74,12 +96,12 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
         return res.status(404).json({ message: 'Order not found' });
     }
 
-
+    order.isPaid = true;
     const data = {
         total_amount: order.totalPrice,
         currency: 'BDT',
         tran_id: order._id.toString(), 
-        success_url: 'http://localhost:3030/success', 
+        success_url: `http://localhost:3000/success/{tran_id}`, 
         fail_url: 'http://localhost:3030/fail', 
         cancel_url: 'http://localhost:3030/cancel', 
         shipping_method: 'Courier',
@@ -103,11 +125,11 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
         const GatewayPageURL = apiResponse.GatewayPageURL;
         
         // Redirect the user to the SSLCommerz payment gateway
-        res.redirect(GatewayPageURL);
+        res.send({url: GatewayPageURL});
         console.log('Redirecting to:', GatewayPageURL);
 
         // Update order status to paid
-        order.isPaid = true;
+       
         order.paidAt = Date.now();
         await order.save();
     } catch (error) {

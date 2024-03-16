@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.5.0",
     "bootstrap": "^5.3.2",
+    "dropship": "file:..",
     "react": "^18.2.0",
     "react-bootstrap": "^2.8.0",
     "react-dom": "^18.2.0",
@@ -20,6 +21,7 @@
     "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
     "react-toastify": "^9.1.3",
+    "socket.io-client": "^4.7.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -47,6 +49,9 @@
     ]
   },
   "devDependencies": {
-    "sass": "^1.68.0"
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.35",
+    "sass": "^1.68.0",
+    "tailwindcss": "^3.4.1"
   }
 }
