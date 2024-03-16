@@ -38,25 +38,46 @@ const getProductById = asyncHandler(async (req, res) => {
     }
     
 });
-// @desc create Product
+
+// @desc Create a new product
 // @route POST /api/products
 // @access Private/Admin
+const createProduct = asyncHandler(async (req, res) => {
+  const { name, price, description, brand, category, countInStock, image } = req.body;
+ console.log(name)
+  // Validate request data
+  if (!name || !price || !description || !brand || !category || !countInStock || !image) {
+    res.status(400);
+    throw new Error('Incomplete product information');
+  }
 
-const createProduct = asyncHandler(async (req,res) => {
-    const product = new Product({
-        name: 'Sample name',
-        price: 0,
-        user: req.user._id,
-        brand: 'Sample brand',
-        category: 'Sample Category',
-        countInStock: 0,
-        numReviews: 0,
-        description: 'Sample description',
-    })
+  // Create new product instance
+  const product = new Product({
+    name,
+    price,
+    description,
+    user: req.user._id,
+    brand,
+    category,
+    countInStock,
+    image,
+    numReviews: 0,
+    rating: 0,
+  });
 
-    const createProduct = await product.save();
-    res.status(201).json(createProduct);
+  // Save the product to the database
+  const createdProduct = await product.save();
+
+  // Check if product was successfully created
+  if (createdProduct) {
+    res.status(201).json(createdProduct);
+  } else {
+    res.status(500);
+    throw new Error('Failed to create product');
+  }
 });
+
+
 // @desc    Update a product
 // @route   PUT /api/products/:id
 // @access  Private/Admin
@@ -152,5 +173,31 @@ const createProductReview = asyncHandler(async (req, res) => {
   
     res.json(products);
   });
+
+  // @desc    Fetch products by category
+// @route   GET /api/products/category/:category
+// @access  Public
+const getProductsByCategory = asyncHandler(async (req, res) => {
+  const pageSize = process.env.PAGINATION_LIMIT;
+  const page = Number(req.query.pageNumber) || 1;
+  const category = req.params.category;
+
+  const keyword = req.query.keyword
+    ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: 'i',
+        },
+      }
+    : {};
+
+  const count = await Product.countDocuments({ ...keyword, category });
+  const products = await Product.find({ ...keyword, category })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+
+  res.json({ products, page, pages: Math.ceil(count / pageSize) });
+});
+
 export {getProducts, getProductById, createProduct, updateProduct,deleteProduct,createProductReview,
-    getTopProducts,};
+    getTopProducts,getProductsByCategory};
