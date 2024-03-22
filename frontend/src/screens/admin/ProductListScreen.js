@@ -10,11 +10,12 @@ import {
   useDeleteProductMutation,
   useCreateProductMutation,
 } from '../../slices/productsApiSlice';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const ProductListScreen = () => {
   const { pageNumber } = useParams();
-
+  const navigate = useNavigate();
   const { data, isLoading, error, refetch } = useGetProductsQuery({
     pageNumber,
   });
@@ -37,14 +38,7 @@ const ProductListScreen = () => {
     useCreateProductMutation();
 
   const createProductHandler = async () => {
-    if (window.confirm('Are you sure you want to create a new product?')) {
-      try {
-        await createProduct();
-        refetch();
-      } catch (err) {
-        toast.error(err?.data?.message || err.error);
-      }
-    }
+    navigate('/admin/createproduct');
   };
 
   return (

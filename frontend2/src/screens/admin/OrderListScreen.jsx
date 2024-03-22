@@ -15,7 +15,7 @@ const { data: orders, isLoading, error} = useGetOrdersQuery();
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <Message variant='danger'>{error}</Message>
+        <Message variant='danger'>{error.message}</Message>
       ) : (
         <Table striped bordered hover responsive className='table-sm'>
           <thead>

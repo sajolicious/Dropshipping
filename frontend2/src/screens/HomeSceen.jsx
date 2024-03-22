@@ -1,7 +1,5 @@
-import { Row, Col } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useGetProductsQuery } from '../slices/productsApiSlice';
-import { Link } from 'react-router-dom';
 import Product from '../components/Product';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
@@ -9,6 +7,7 @@ import Paginate from '../components/Paginate';
 import ProductCarousel from '../components/ProductCarousel';
 import Meta from '../components/Meta';
 import ProductCategorySection from '../components/Category';
+
 const HomeScreen = () => {
   const { pageNumber, keyword } = useParams();
 
@@ -19,32 +18,32 @@ const HomeScreen = () => {
 
   return (
     <>
-    <ProductCategorySection/>
+      <ProductCategorySection />
       {!keyword ? (
-        
         <ProductCarousel />
       ) : (
-        <Link to='/' className='btn btn-light mb-4'>
+        <Link
+          to='/'
+          className='inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow'
+        >
           Go Back
         </Link>
       )}
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <Message variant='danger'>
+        <Message variant='danger' className='my-4'>
           {error?.data?.message || error.error}
         </Message>
       ) : (
         <>
           <Meta />
-          <h1>Latest Products</h1>
-          <Row>
+          <h1 className='text-2xl font-semibold mb-4'>Latest Products</h1>
+          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
             {data.products.map((product) => (
-              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                <Product product={product} />
-              </Col>
+              <Product key={product._id} product={product} />
             ))}
-          </Row>
+          </div>
           <Paginate
             pages={data.pages}
             page={data.page}

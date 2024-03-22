@@ -14,7 +14,7 @@ import messageRoutes from './routes/messageRoutes.js';
 import couponRoutes from './routes/couponRoutes.js'
 import cors from 'cors';
 import * as socketIO from 'socket.io'; 
-import { Console } from 'console';
+
 
 dotenv.config();
 
@@ -22,7 +22,7 @@ const app = express();
 const httpServer = http.createServer(app);
 const io = new socketIO.Server(httpServer, {
   cors: {
-    origin: 'http://localhost:3000', 
+    origin: 'http://localhost:5173', 
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   },
@@ -50,7 +50,7 @@ app.use("/api/message", messageRoutes);
 app.use("/api/coupons", couponRoutes);
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:5173',
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));

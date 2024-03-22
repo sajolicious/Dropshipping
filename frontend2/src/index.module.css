@@ -1,4 +1,0 @@
-/* @tailwind base; */
-.base-styles, body {
-  @apply font-sans text-base;
-}
