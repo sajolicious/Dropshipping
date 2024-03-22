@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { useState, useEffect } from 'react';
 import { Table, Form, Button , Row, Col} from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
@@ -97,7 +97,7 @@ const ProfileScreen = () => {
         {isLoading? (
           <Loader />
         ) : error ? (
-          <Message variant='danger'>{error}</Message>
+          <Message variant='danger'>{error.message}</Message>
         ) : (
           <Table striped bordered hover responsive className='table-sm'>
             <thead>

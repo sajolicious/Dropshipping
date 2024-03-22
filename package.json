@@ -8,8 +8,7 @@
     "start": "node backend/server.js",
     "server": "nodemon backend/server.js",
     "client": "npm start --prefix frontend",
-    "client1": "npm start --prefix frontend2",
-    "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run client1\"",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:clone": "node backend/seeder.js",
     "data:destroy": "node backend/seeder.js -d",
     "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"

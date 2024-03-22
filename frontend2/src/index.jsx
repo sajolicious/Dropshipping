@@ -6,8 +6,7 @@ import {
   Route,
   RouterProvider
 } from 'react-router-dom';
-
-
+import './index.css'
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import PrivateRoute from './components/PrivateRoute';
@@ -35,6 +34,9 @@ import ProductCreateScreen from './screens/admin/ProductCreateScreen';
 import { HelmetProvider } from 'react-helmet-async';
 import ChatArea from './screens/chatScreen/ChatArea';
 import CreateSingleChat from './screens/chatScreen/createSingleChat';
+import CreateCouponScreen from './screens/coupons/CreateCouponScreen';
+import AllCouponsScreen from './screens/coupons/AllCouponsScreen';
+import UpdateCouponScreen from './screens/coupons/UpdateCouponScreen';
 // Create the router
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -81,6 +83,9 @@ const router = createBrowserRouter(
         <Route path='/admin/userlist' element={<UserListScreen />} />
         <Route path='/admin/product/:id/edit' element={<ProductEditScreen />} />
         <Route path='/admin/user/:id/edit' element={<UserEditScreen />} />
+        <Route path='/admin/createcoupon' element={<CreateCouponScreen />} />
+        <Route path='/admin/allcoupons' element={<AllCouponsScreen />} />
+        <Route path='/admin/updatecoupons/:id/edit' element={<UpdateCouponScreen />} />
       </Route>
     </Route>
   )
